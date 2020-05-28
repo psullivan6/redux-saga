@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+import styles from './styles.module.css';
 
-export function Counter() {
-  const count = useSelector(selectCount);
+function Counter() {
+  const count = useSelector((state) => state.counter);
   const dispatch = useDispatch();
   const [incrementAmount, setIncrementAmount] = useState('2');
+
+  console.log('count', count);
+
+  function increment(value = 1) {
+    dispatch({ type: 'COUNTER_INCREMENT', value });
+  }
+
+  function decrement(value = -1) {
+    dispatch({ type: 'COUNTER_INCREMENT', value });
+  }
 
   return (
     <div>
@@ -20,7 +23,7 @@ export function Counter() {
         <button
           className={styles.button}
           aria-label="Increment value"
-          onClick={() => dispatch(increment())}
+          onClick={() => increment()}
         >
           +
         </button>
@@ -28,7 +31,7 @@ export function Counter() {
         <button
           className={styles.button}
           aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
+          onClick={() => decrement()}
         >
           -
         </button>
@@ -38,23 +41,17 @@ export function Counter() {
           className={styles.textbox}
           aria-label="Set increment amount"
           value={incrementAmount}
-          onChange={e => setIncrementAmount(e.target.value)}
+          onChange={(e) => setIncrementAmount(e.target.value)}
         />
         <button
           className={styles.button}
-          onClick={() =>
-            dispatch(incrementByAmount(Number(incrementAmount) || 0))
-          }
+          onClick={() => increment(Number(incrementAmount) || 0)}
         >
           Add Amount
-        </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(Number(incrementAmount) || 0))}
-        >
-          Add Async
         </button>
       </div>
     </div>
   );
 }
+
+export default Counter;
